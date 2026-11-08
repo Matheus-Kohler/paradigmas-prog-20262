@@ -24,7 +24,8 @@ class ClassroomRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:500',
-            'vacancies' => 'required|numeric|min:1|max:500'
+            'vacancies' => 'required|numeric|min:1|max:500',
+            'course_id' => 'nullable|integer|exists:courses,id',
         ];
     }
 
@@ -38,7 +39,9 @@ class ClassroomRequest extends FormRequest
             'vacancies.required' => 'O campo vagas é obrigatório.',
             'vacancies.numeric' => 'O campo vagas deve ser um número.',
             'vacancies.min' => 'O campo vagas deve ser no mínimo :min.',
-            'vacancies.max' => 'O campo vagas deve ser no máximo :max.'
+            'vacancies.max' => 'O campo vagas deve ser no máximo :max.',
+            'course_id.integer' => 'O campo curso deve ser um número inteiro.',
+            'course_id.exists' => 'O curso selecionado não existe.',
         ];
     }
 }

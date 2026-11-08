@@ -23,6 +23,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "Filtra pelo id do curso",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -82,6 +91,11 @@
                                         "example": 30,
                                         "maximum": 500,
                                         "minimum": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -204,6 +218,11 @@
                                         "example": 30,
                                         "maximum": 500,
                                         "minimum": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -961,6 +980,25 @@
                     "vacancies": {
                         "type": "integer",
                         "example": 30
+                    },
+                    "course_id": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "course": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Course"
+                            },
+                            {
+                                "type": "object",
+                                "nullable": true,
+                                "enum": [
+                                    null
+                                ]
+                            }
+                        ]
                     },
                     "created_at": {
                         "type": "string",

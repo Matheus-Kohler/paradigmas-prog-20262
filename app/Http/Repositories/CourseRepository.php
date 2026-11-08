@@ -13,7 +13,7 @@ class CourseRepository extends BaseRepository
 
     public function getWithFilters(array $data)
     {
-        $builder = $this->model->query()->where(function ($query) use ($data) {
+        $builder = $this->model->query()->with('classrooms')->where(function ($query) use ($data) {
             if (data_get($data, 'name')) {
                 $query->where('name', 'like', '%' . $data['name'] . '%');
             }
@@ -21,4 +21,10 @@ class CourseRepository extends BaseRepository
 
         return $this->index($builder);
     }
+
+    public function show(string $id)
+    {
+        return $this->model->with('classrooms')->findOrFail($id);
+    }
 }
+

@@ -12,6 +12,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'name', type: 'string', example: 'Turma A'),
         new OA\Property(property: 'vacancies', type: 'integer', example: 30),
+        new OA\Property(property: 'course_id', type: 'integer', example: 1, nullable: true),
+        new OA\Property(property: 'course', ref: '#/components/schemas/Course', nullable: true),
         new OA\Property(property: 'created_at', type: 'string', format: 'date-time'),
         new OA\Property(property: 'updated_at', type: 'string', format: 'date-time'),
     ]
@@ -29,6 +31,8 @@ class ClassroomResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'vacancies' => $this->vacancies,
+            'course_id' => $this->course_id,
+            'course' => new CourseResource($this->whenLoaded('course')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

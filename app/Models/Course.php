@@ -17,3 +17,4 @@ class Course extends Model
         return $this->hasMany(Classroom::class);
     }
 }
+

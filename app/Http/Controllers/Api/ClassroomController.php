@@ -22,7 +22,10 @@ class ClassroomController extends Controller
         summary: 'Lista as turmas',
         security: [['sanctum' => []]],
         tags: ['Turmas'],
-        parameters: [new OA\Parameter(name: 'name', in: 'query', required: false, description: 'Filtra pelo nome (busca parcial)', schema: new OA\Schema(type: 'string'))],
+        parameters: [
+            new OA\Parameter(name: 'name', in: 'query', required: false, description: 'Filtra pelo nome (busca parcial)', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'course_id', in: 'query', required: false, description: 'Filtra pelo id do curso', schema: new OA\Schema(type: 'integer')),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -52,6 +55,7 @@ class ClassroomController extends Controller
                 properties: [
                     new OA\Property(property: 'name', type: 'string', minLength: 2, maxLength: 500, example: 'Turma A'),
                     new OA\Property(property: 'vacancies', type: 'integer', minimum: 1, maximum: 500, example: 30),
+                    new OA\Property(property: 'course_id', type: 'integer', example: 1, nullable: true),
                 ]
             )
         ),
@@ -102,6 +106,7 @@ class ClassroomController extends Controller
                 properties: [
                     new OA\Property(property: 'name', type: 'string', minLength: 2, maxLength: 500, example: 'Turma A'),
                     new OA\Property(property: 'vacancies', type: 'integer', minimum: 1, maximum: 500, example: 30),
+                    new OA\Property(property: 'course_id', type: 'integer', example: 1, nullable: true),
                 ]
             )
         ),
