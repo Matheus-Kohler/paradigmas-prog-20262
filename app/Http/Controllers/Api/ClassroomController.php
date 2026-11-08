@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassroomRequest;
+use App\Http\Requests\EnrollmentRequest;
 use App\Http\Resources\ClassroomResource;
 use App\Http\Services\ClassroomService;
 use Illuminate\Http\Request;
@@ -142,5 +143,50 @@ class ClassroomController extends Controller
         $this->classroomService->destroy($id);
 
         return response()->noContent();
+    }
+
+    /**
+     * Gerencia a matrícula/vinculação de um usuário em uma turma.
+     */
+    #[OA\Post(
+        path: '/classrooms/{id}/enroll',
+        summary: 'Matricula ou remove um aluno de uma turma',
+        security: [['sanctum' => []]],
+        tags: ['Turmas'],
+        parameters: [new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['user_id', 'action'],
+                properties: [
+                    new OA\Property(property: 'user_id', type: 'integer', example: 1),
+                    new OA\Property(property: 'action', type: 'string', enum: ['attach', 'detach', 'add', 'remove', 'enroll', 'unenroll'], example: 'attach'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Matrícula gerenciada com sucesso',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Usuário vinculado à turma com sucesso.'),
+                        new OA\Property(property: 'classroom', ref: '#/components/schemas/Classroom'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 401, ref: '#/components/responses/Unauthenticated'),
+            new OA\Response(response: 404, ref: '#/components/responses/NotFound'),
+            new OA\Response(response: 422, ref: '#/components/responses/ValidationError'),
+        ]
+    )]
+    public function enroll(EnrollmentRequest $request, string $id)
+    {
+        $result = $this->classroomService->manageEnrollment($id, $request->validated());
+
+        return response()->json([
+            'message' => $result['message'],
+            'classroom' => new ClassroomResource($result['classroom']),
+        ]);
     }
 }

@@ -297,6 +297,93 @@
                 ]
             }
         },
+        "/classrooms/{id}/enroll": {
+            "post": {
+                "tags": [
+                    "Turmas"
+                ],
+                "summary": "Matricula ou remove um aluno de uma turma",
+                "description": "Gerencia a matrícula/vinculação de um usuário em uma turma.",
+                "operationId": "686052b2f5ed41c763e010dcc9168621",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "action"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "example": "attach",
+                                        "enum": [
+                                            "attach",
+                                            "detach",
+                                            "add",
+                                            "remove",
+                                            "enroll",
+                                            "unenroll"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Matrícula gerenciada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário vinculado à turma com sucesso."
+                                        },
+                                        "classroom": {
+                                            "$ref": "#/components/schemas/Classroom"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthenticated"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/courses": {
             "get": {
                 "tags": [
@@ -999,6 +1086,13 @@
                                 ]
                             }
                         ]
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        },
+                        "nullable": true
                     },
                     "created_at": {
                         "type": "string",

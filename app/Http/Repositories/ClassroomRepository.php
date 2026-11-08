@@ -27,6 +27,16 @@ class ClassroomRepository extends BaseRepository
 
     public function show(string $id)
     {
-        return $this->model->with('course')->findOrFail($id);
+        return $this->model->with(['course', 'users'])->findOrFail($id);
+    }
+
+    public function attachUser(Classroom $classroom, int $userId): void
+    {
+        $classroom->users()->syncWithoutDetaching([$userId]);
+    }
+
+    public function detachUser(Classroom $classroom, int $userId): void
+    {
+        $classroom->users()->detach($userId);
     }
 }

@@ -24,5 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Equivale a isso
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/classrooms', ClassroomController::class);
+    Route::post('/classrooms/{id}/enroll', [ClassroomController::class, 'enroll']);
     Route::apiResource('/courses', CourseController::class);
 });
